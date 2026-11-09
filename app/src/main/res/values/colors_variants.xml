@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- OLED variant overrides -->
+    <color name="bg_primary_oled">#FF000000</color>
+    <color name="bg_secondary_oled">#FF0A0A0A</color>
+    <color name="bg_tertiary_oled">#FF161616</color>
+    <color name="border_default_oled">#FF262626</color>
+    
+    <!-- Thorn variant overrides -->
+    <color name="bg_primary_thorn">#FF12111F</color>
+    <color name="bg_secondary_thorn">#FF1D1B33</color>
+    <color name="bg_tertiary_thorn">#FF2C294A</color>
+    <color name="border_default_thorn">#FF3D3865</color>
+    <color name="text_secondary_thorn">#FFC9C6E8</color>
+    <color name="accent_thorn">#FF8A82C2</color>
+    <color name="accent_secondary_thorn">#FF6B61A8</color>
+    <color name="error_thorn">#FFD16B8A</color>
+    <color name="info_thorn">#FF8A82C2</color>
+    
+    <!-- AmethystBreeze variant overrides -->
+    <color name="bg_primary_amethyst">#FF070712</color>
+    <color name="bg_secondary_amethyst">#FF141427</color>
+    <color name="bg_tertiary_amethyst">#FF181832</color>
+    <color name="bg_overlay_amethyst">#FF241A40</color>
+    <color name="border_default_amethyst">#FF1C1A33</color>
+    <color name="border_subtle_amethyst">#FF1C1A33</color>
+    <color name="text_primary_amethyst">#FFF0EAFF</color>
+    <color name="text_secondary_amethyst">#FF8B7BBD</color>
+    <color name="text_tertiary_amethyst">#FF5F5AA2</color>
+    <color name="text_disabled_amethyst">#FF5F5AA2</color>
+    <color name="accent_amethyst">#FF7C4DFF</color>
+    <color name="accent_secondary_amethyst">#FF9A7CFF</color>
+    <color name="hover_amethyst">#FF9A7CFF</color>
+    <color name="focus_amethyst">#FF7C4DFF</color>
+    <color name="border_focus_amethyst">#FF7C4DFF</color>
+    <color name="info_amethyst">#FF7C4DFF</color>
+    <color name="accent_text_amethyst">#FFF0EAFF</color>
+    
+    <!-- AzureGuardian variant overrides -->
+    <color name="bg_primary_azure">#FF000814</color>
+    <color name="bg_secondary_azure">#FF0A1426</color>
+    <color name="bg_tertiary_azure">#FF0A1426</color>
+    <color name="bg_overlay_azure">#FF1A3352</color>
+    <color name="border_default_azure">#FF1A2833</color>
+    <color name="border_subtle_azure">#FF1A2833</color>
+    <color name="text_primary_azure">#FFE6F2FF</color>
+    <color name="text_secondary_azure">#FF4D6B8A</color>
+    <color name="text_tertiary_azure">#FF336699</color>
+    <color name="text_disabled_azure">#FF336699</color>
+    <color name="accent_azure">#FF0066CC</color>
+    <color name="accent_secondary_azure">#FF6699FF</color>
+    <color name="hover_azure">#FF6699FF</color>
+    <color name="focus_azure">#FF0066CC</color>
+    <color name="border_focus_azure">#FF0066CC</color>
+    <color name="info_azure">#FF0066CC</color>
+    <color name="accent_text_azure">#FFE6F2FF</color>
+</resources>

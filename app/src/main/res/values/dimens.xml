@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Font sizes (from HTML) -->
+    <dimen name="fs_xs">12sp</dimen>
+    <dimen name="fs_sm">14sp</dimen>
+    <dimen name="fs_base">16sp</dimen>
+    <dimen name="fs_lg">18sp</dimen>
+    <dimen name="fs_2xl">24sp</dimen>
+    
+    <!-- Key height range -->
+    <dimen name="key_height_min">38dp</dimen>
+    <dimen name="key_height_max">64dp</dimen>
+    <dimen name="key_height_default">46dp</dimen>
+    
+    <!-- Spacing (multiples of 4) -->
+    <dimen name="gap_xs">2dp</dimen>
+    <dimen name="gap_sm">4dp</dimen>
+    <dimen name="gap_md">8dp</dimen>
+    <dimen name="gap_lg">12dp</dimen>
+    <dimen name="gap_xl">16dp</dimen>
+    
+    <!-- Panel padding -->
+    <dimen name="panel_padding">8dp</dimen>
+    
+    <!-- Corner radii -->
+    <dimen name="radius_sm">2dp</dimen>
+    <dimen name="radius_md">4dp</dimen>
+    <dimen name="radius_panel">8dp</dimen>
+    
+    <!-- Hint size (top-right corner of key) -->
+    <dimen name="hint_text_size">10sp</dimen>
+    
+    <!-- Bento grid -->
+    <dimen name="bento_gap">8dp</dimen>
+    <dimen name="bento_tile_padding">8dp</dimen>
+</resources>

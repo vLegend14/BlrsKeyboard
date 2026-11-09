@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KeyLab BlrsDesign Lab · comparación de acentos</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   KeyLab BlrsDesign LAB — laboratorio del acento: la comparación A/B/C ya
+   no vive en presets, es un AJUSTE ("Acento" en el panel de Ajustes, ver
+   bloque "LAB" al final); copia BlrsDesign de keylab-blrs.html (los
+   originales NO se tocan): el ganador se porta de vuelta a keylab-blrs.html.
+   Sistema de diseño: BlrsDesign (Theme.qml de fortress-of-the-blue-rose).
+   REGLA DE ORO: todo token nace de Theme.qml; ningún hex suelto en las
+   reglas. EL CIAN ESTÁ PROHIBIDO: el acento cian del original muere y en
+   su lugar afirma la Rosa (rose-500, azul verdadero sin cian).
+   Dark-only: BlrsDesign no tiene variante clara; el bloque de esquema
+   claro y los data-theme light/dark del original mueren. En su lugar, el
+   ajuste "Tema" es un selector de VARIANTE (data-theme):
+    bluerose (default, sin bloque propio: el :root ya ES BlueRose) / oled /
+    thorn / amethyst / azure. Cada variante pisa SOLO las variables
+    que esa variante pisa en Theme.qml (_variantOverrides); el resto hereda
+    el base — así cambiar de variante nunca sorprende.
+    Void queda fuera de KeyLab a decisión del usuario: el tema existe en
+    BlrsDesign, solo no se expone aquí.
+
+   MAPEO tokens viejos → BlrsDesign (Theme.qml) — por nombre; los hexes
+   viejos no se reproducen ni en comentarios: un residuo es una grieta.
+     --bg  → --bg-primary    #121212  obsidianBase    (fondos)
+     --pn  → --bg-secondary  #1E1E1E  obsidianDeep    (paneles)
+     --key → --bg-tertiary   #2A2A2A  obsidianSurface (teclas)
+      --sp  → (se reparte por rol: pozos (teclas especiales) → --bg-secondary,
+               popups → --bg-overlay #1D1B33 thorn800,
+               chips del log → --bg-tertiary)
+      NOTA (pozos): el mapeo "Inputs" (--field-bg thorn600) no calza en un
+      TECLADO: pozos violetas dejan la toolbar, el shift y el space como
+      losas violetas en variantes que no tienen nada violeta (BlueRose,
+      OLED). El receso neutro es --bg-secondary (obsidianDeep): cada
+      variante pisa el suyo, y se restaura la relación del original — la
+      tecla especial queda MÁS hundida que la tecla normal (bg-tertiary).
+     --tx  → --text-primary  #FAFAFA  bloomWhite
+     --mut → --text-tertiary #CCCCCC  bloomDusk
+     --ac  → --accent        #2D68D8  rose500  (MUERE EL CIAN)
+     --er  → --error         #E8384F  signalRed
+   Roles NUEVOS sin equivalente viejo:
+     --accent-text #0A0A0A obsidianNight — lo que vive SOBRE el acento
+     vuelve a la piedra (reemplaza el verde-piedra que el original ponía
+     sobre el acento).
+     --accent-tertiary #6FA7FF rose300 "Azure Spark" — la reacción.
+     --hover #6FA7FF rose300 · --focus/--border-focus #3E83F5 rose400.
+   Geometría: NUNCA redondo total. Los radios 7/9/10/14 del original se
+   reasignan a --radius-sm 2 / --radius-md 4 / --radius-panel 8.
+   El rgba(0,0,0,.35) de la sombra de tecla SE QUEDA: no es un color, es el
+   canto de la piedra tallada (sombra estructural negra, no un token).
+   Espaciado: todo al múltiplo de 4; los 2px que quedan (padding de chips
+   del log, gap de la grilla de emojis, margen de .ph) se toleran porque a
+   esa escala visualmente son necesarios.
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root{
+  /* ── Fondos (Obsidian: la piedra del muro) ── */
+  --bg-primary:#121212;    /* obsidianBase — era --bg */
+  --bg-secondary:#1E1E1E;  /* obsidianDeep — era --pn */
+   --bg-tertiary:#2A2A2A;   /* obsidianSurface — era --key */
+   --bg-overlay:#1D1B33;    /* thorn800 — popups flotantes ("Superposiciones, modales") */
+  /* ── Bordes ── */
+  --border-default:#333333; /* obsidianEdge */
+  --border-subtle:#444444;  /* obsidianMist */
+  --border-focus:#3E83F5;   /* rose400 */
+  /* ── Texto (Bloom: lo que la Rosa ilumina) ── */
+  --text-primary:#FAFAFA;   /* bloomWhite — era --tx */
+  --text-secondary:#E8E8E8; /* bloomPale */
+  --text-tertiary:#CCCCCC;  /* bloomDusk — era --mut */
+  --text-disabled:#504983;  /* thorn500 */
+  /* ── Acento (Rose: azul verdadero, sin cian) ── */
+  --accent:#2D68D8;           /* rose500 — era --ac */
+  --accent-secondary:#2452B8; /* rose600 */
+  --accent-tertiary:#6FA7FF;  /* rose300 — "Azure Spark": la reacción */
+  --hover:#6FA7FF;            /* rose300 */
+  --focus:#3E83F5;            /* rose400 */
+  --accent-text:#0A0A0A;      /* obsidianNight — sobre el acento, vuelve a la piedra (muere el verde-piedra del original) */
+  /* ── Señales ── */
+  --error:#E8384F;   /* signalRed — era --er */
+  --success:#2452B8; /* rose600 */
+  --warning:#6FA7FF; /* rose300 */
+  --info:#2D68D8;    /* rose500 */
+  /* ── Geometría: el chaflán corto, nunca el redondo total ── */
+  --radius-sm:2px;--radius-md:4px;--radius-panel:8px;
+  /* ── Tipografía: las tres voces (equivalente CSS de resolveFont) ── */
+  --font-serif:"EB Garamond",Georgia,serif;
+  --font-sans:Inter,system-ui,"Segoe UI",sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --fs-xs:12px;--fs-sm:14px;--fs-base:16px;--fs-lg:18px;--fs-2xl:24px;
+  color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+/* ── Variantes (réplica de _variantOverrides de Theme.qml): cada una pisa
+      SOLO lo que su mapa pisa; el resto hereda el :root base ── */
+:root[data-theme="oled"]{--bg-primary:#000000;--bg-secondary:#0A0A0A;--bg-tertiary:#161616;--border-default:#262626}
+:root[data-theme="thorn"]{--bg-primary:#12111F;--bg-secondary:#1D1B33;--bg-tertiary:#2C294A;--border-default:#3D3865;--text-secondary:#C9C6E8;--accent:#8A82C2;--accent-secondary:#6B61A8;--error:#D16B8A;--info:#8A82C2}
+/* Thorn NO pisa hover/focus/accent-tertiary: la chispa es de la Rosa
+   (rose300/rose400), no del tema — heredan el base sin excepciones. */
+:root[data-theme="amethyst"]{--bg-primary:#070712;--bg-secondary:#141427;--bg-tertiary:#181832;--bg-overlay:#241A40;--border-default:#1C1A33;--border-subtle:#1C1A33;--text-primary:#F0EAFF;--text-secondary:#8B7BBD;--text-tertiary:#5F5AA2;--text-disabled:#5F5AA2;--accent:#7C4DFF;--accent-secondary:#9A7CFF;--hover:#9A7CFF;--focus:#7C4DFF;--border-focus:#7C4DFF;--info:#7C4DFF;--accent-text:#F0EAFF}
+:root[data-theme="azure"]{--bg-primary:#000814;--bg-secondary:#0A1426;--bg-tertiary:#0A1426;--bg-overlay:#1A3352;--border-default:#1A2833;--border-subtle:#1A2833;--text-primary:#E6F2FF;--text-secondary:#4D6B8A;--text-tertiary:#336699;--text-disabled:#336699;--accent:#0066CC;--accent-secondary:#6699FF;--hover:#6699FF;--focus:#0066CC;--border-focus:#0066CC;--info:#0066CC;--accent-text:#E6F2FF}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg-primary);color:var(--text-primary);font-family:var(--font-sans);font-size:var(--fs-base);line-height:1.4}
+main{max-width:520px;margin:0 auto;padding:12px 8px 24px}
+/* h1: la Serif manda (autoridad) + la vena de acento bajo el título: la
+   firma del sistema, como la cabecera de LapisPanel. */
+h1{font-family:var(--font-serif);font-size:var(--fs-lg);letter-spacing:1.5px;color:#FFFFFF;margin:4px 0 2px}
+h1::after{content:"";display:block;width:48px;height:2px;background:var(--accent);margin-top:4px}
+/* p.s: la Mono mide — el subtítulo es dato, no prosa. */
+p.s{margin:0 0 8px;color:var(--text-secondary);font-family:var(--font-mono);font-size:var(--fs-xs)}
+#out{width:100%;height:110px;resize:vertical;background:var(--bg-secondary);color:var(--text-primary);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:8px;font-family:var(--font-mono);font-size:var(--fs-base);line-height:1.4}
+#log{display:flex;gap:4px;flex-wrap:wrap;min-height:26px;margin:8px 0}
+#log span{background:var(--bg-tertiary);border-radius:var(--radius-sm);padding:2px 8px;font-family:var(--font-mono);font-size:var(--fs-xs)}
+#log span:last-child{outline:1px solid var(--accent)}
+#wrap{position:relative;background:var(--bg-secondary);border-radius:var(--radius-panel);padding:8px 4px;touch-action:none;user-select:none;-webkit-user-select:none}
+.row{display:flex;gap:4px;margin-bottom:4px}.row:last-child{margin-bottom:0}
+/* Tecla: el monolito cuadrado (radius 2; el 7 del original muere). La
+   sombra dura inferior se queda: es el canto de la piedra tallada
+   (rgba negro estructural, no un token). */
+.k{position:relative;flex:1 1 0;min-width:0;height:var(--kh,46px);display:flex;align-items:center;justify-content:center;background:var(--bg-tertiary);border-radius:var(--radius-sm);font-family:var(--font-sans);font-size:var(--fs-base);cursor:pointer;box-shadow:0 1px 0 rgba(0,0,0,.35)}
+/* Tecla especial (shift, bksp, space…): receso neutro --bg-secondary, no
+   el pozo violeta del mapeo "Inputs" (ver NOTA "pozos" en la cabecera):
+   en un teclado el pozo de input no existe, y bg-secondary hereda el tono
+   de receso de CADA variante. Texto mudo (text-tertiary, como el --mut
+   del original): la especial no compite con las teclas de texto. */
+.k.sp{background:var(--bg-secondary);font-size:var(--fs-xs);color:var(--text-tertiary)}
+.k.on{background:var(--accent);color:var(--accent-text)}
+/* .k.act: rose300 y no rose500 — sobre obsidianSurface (#2A2A2A) rose300
+   da ≈6:1 y rose500 apenas ~3.5:1; el modificador activo tiene que LEERSE. */
+.k.act{outline:2px solid var(--accent);color:var(--accent-tertiary)}
+.row.tb+.row:not(.tb){margin-top:8px}
+/* Toolbar (Esc/Ctrl/flechas): mismo receso neutro que .k.sp, pero texto
+   LEGIBLE (text-primary, como el --tx del original): son acciones
+   importantes, no mudas. */
+.row.tb .k{background:var(--bg-secondary);color:var(--text-primary);font-size:var(--fs-xs);height:calc(var(--kh,46px)*.8)}
+.row.tb .k.on{background:var(--accent);color:var(--accent-text)}.row.tb .k.act{color:var(--accent-tertiary)}
+.k i{position:absolute;top:2px;right:4px;font-style:normal;font-size:10px;color:var(--text-tertiary)}
+.pop{position:absolute;display:flex;gap:4px;padding:4px;background:var(--bg-overlay);border:1px solid var(--accent);border-radius:var(--radius-panel);z-index:5;box-shadow:0 6px 18px rgba(0,0,0,.4)}
+.o{min-width:34px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);background:var(--bg-tertiary);font-size:19px}
+.o.h{background:var(--accent);color:var(--accent-text)}
+#emo,#cfg{position:absolute;inset:0;background:var(--bg-secondary);border-radius:var(--radius-panel);padding:8px;z-index:6;overflow:auto;touch-action:pan-y}
+.tabs{display:flex;gap:4px;margin-bottom:8px}.tabs button{flex:1;font-size:var(--fs-lg);padding:4px 0}
+.tabs .sel,.seg .sel{background:var(--accent);color:var(--accent-text);border-color:var(--accent)}
+.eg{display:grid;grid-template-columns:repeat(8,1fr);gap:2px}.eg button{background:none;border:0;font-size:var(--fs-2xl);padding:4px 0}
+.ph{display:flex;justify-content:space-between;align-items:center;margin:0 2px 8px}
+.k.lock,.row.tb .k.lock{background:var(--accent);color:var(--accent-text)}
+.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+/* .tile: la LapisCard — más ligera que el panel que la contiene.
+   Grid de 3 columnas (bento japonés): default span 1, w4 span 2, w6 span 3. */
+.tile{position:relative;grid-column:span 1;background:var(--bg-tertiary);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:8px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+.tile.w4{grid-column:span 2}.tile.w6{grid-column:span 3}
+.tile h4{margin:0;font-size:var(--fs-xs);font-weight:600;color:var(--text-tertiary)}
+.tile i{position:absolute;right:8px;top:2px;font-style:normal;font-size:26px;opacity:.14;pointer-events:none}
+.seg{display:flex;flex-direction:column;gap:4px}.seg.row{flex-direction:row}.seg button{flex:1;padding:8px 4px;font-size:var(--fs-xs);border-radius:var(--radius-sm)}
+.tile input[type=range]{width:100%}
+.bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0 8px;font-size:var(--fs-sm)}
+select,button{background:var(--bg-secondary);color:var(--text-primary);border:1px solid var(--border-default);border-radius:var(--radius-sm);padding:8px 12px;font-family:var(--font-sans);font-size:var(--fs-sm)}
+/* Deshabilitado: el disabled canónico del sistema (0.45). */
+button[disabled]{opacity:.45;cursor:default}
+button.p{background:var(--accent);color:var(--accent-text);border-color:var(--accent);font-weight:600}
+input[type=range]{accent-color:var(--accent)}
+#json{width:100%;height:260px;background:var(--bg-secondary);color:var(--text-primary);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:8px;font-family:var(--font-mono);font-size:var(--fs-xs);line-height:1.4;white-space:pre;overflow:auto}
+#err{color:var(--error);font-size:var(--fs-sm);min-height:18px}
+details{margin-top:8px}summary{cursor:pointer;color:var(--text-tertiary)}
+ul{color:var(--text-tertiary);font-size:var(--fs-sm);padding-left:18px;margin:8px 0}
+/* ── LAB — acento y marca ──────────────────────────────────────────────────
+   El AJUSTE declara la opción (cfg.ac → data-accent en #wrap, pintado en
+   paint()); el CSS la consume. La comparación A/B/C vive en Ajustes >
+   Acento. El tinte NUNCA es un color fijo:
+   color-mix(in srgb, var(--accent) N%, var(--bg-secondary)) — así el velo
+   es el acento de CADA variante (Thorn → velo violeta, OLED → azul sobre
+   negro) sin CSS por variante. color-mix requiere navegador 2023+
+   (Chromium 111+ / Firefox 113+). Los porcentajes salen de los alphas
+   canónicos del sistema: 14% = alphaTintOccupied (tinte de tecla ocupada),
+   22% = borde de acento moderado. Los estados .k.on/.k.act/.lock NO se
+   tocan en ninguna opción: el flash de presionada es acento pleno siempre.
+   La marca de agua del teclado ya NO es la rosa de la esquina (retirada
+   por completo, DOM y CSS): es el dash del indicador de la barra
+   espaciadora (.k.spc::after, al final de este bloque). */
+/* A: tinte 14% en especiales (space excluido con :not(.spc): la tecla
+   silenciosa queda neutral) */
+[data-accent="a"] .row.tb .k,[data-accent="a"] .k.sp:not(.spc){background:color-mix(in srgb,var(--accent) 14%,var(--bg-secondary))}
+/* B: lo de A + hints en accent-tertiary + borde de acento sutil */
+[data-accent="b"] .row.tb .k,[data-accent="b"] .k.sp:not(.spc){background:color-mix(in srgb,var(--accent) 14%,var(--bg-secondary));border:1px solid color-mix(in srgb,var(--accent) 22%,transparent)}
+[data-accent="b"] .k i{color:var(--accent-tertiary)}
+/* C: sin reglas — el acento solo vive en la interacción */
+/* Barra espaciadora: el indicador clásico de spacebar (el "—" de siempre)
+   como marca de agua. Es un ::after de la tecla space (.k.spc, gancho que
+   paint() ya le pone): la tecla es flex centrada, así que el ::after
+   queda centrado en ambos ejes sin cálculos. Ancho 35% de la tecla, 3px
+   de alto, radio completo (999px: a 3px de alto ES la píldora que pide la
+   marca; la regla "nunca redondo total" del sistema rige para piezas de
+   UI — botones, tarjetas — no para un trazo de 3px). Con acento "c"
+   (Default) queda neutral: text-tertiary al 50%, marca de agua y no
+   etiqueta. Con "a"/"b" toma var(--accent) al .6: rose500 es más oscuro
+   que bloomDusk y a igual opacidad se apagaría. El acento de CADA
+   variante llega solo por la variable (Thorn violeta, OLED azul sobre
+   negro), sin CSS por variante. El FONDO de la tecla space sigue neutral
+   en a/b (el :not(.spc) de las reglas de tinte no cambia): solo el dash
+   lleva el acento — la tecla silenciosa sigue silenciosa. */
+.k.spc::after{content:"";width:35%;height:3px;border-radius:999px;background:var(--text-tertiary);opacity:.5}
+[data-accent="a"] .k.spc::after,[data-accent="b"] .k.spc::after{background:color-mix(in srgb,var(--accent) 14%,var(--bg-secondary))}
+</style></head><body><main>
+<h1>KeyLab</h1>
+<p class="s">Probá layouts de teclado y editá el JSON en vivo.</p>
+<textarea id="out" inputmode="none" placeholder="Escribí con el teclado de abajo…" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea>
+<div id="log"></div>
+<div id="wrap"><div id="kb"></div><div id="emo" hidden></div><div id="cfg" hidden></div></div>
+<div class="bar">
+<label>Layout <select id="pre"><option value="blrs">BlrsKeyboard</option><option value="custom">Personalizado</option></select></label>
+<label>Alto de tecla <input id="kh" type="range" min="38" max="64" value="46"></label>
+<button id="tbar" title="Solo aplica al preset BlrsKeyboard">Barra: sí</button>
+<button id="clr">Limpiar texto</button>
+</div>
+<details><summary>Editar layout (JSON)</summary>
+<div class="bar"><button class="p" id="app">Aplicar layout</button><button id="rst">Restaurar preset</button></div>
+<textarea id="json" spellcheck="false"></textarea><div id="err"></div>
+<ul>
+<li>Cada fila es una lista de teclas. Un carácter es una tecla de texto; «@nombre» es una tecla especial.</li>
+<li>«|1.4» al final cambia el ancho relativo, por ejemplo "@shift|1.4".</li>
+<li>«@go:capa» cambia de capa. Teclas especiales: shift, bksp, del, enter, space, esc, tab, ctrl, alt, left, right, up, down, home, end, F1…F12.</li>
+<li>«lp» es el carácter que se inserta al mantener presionada la tecla («@emoji» abre el panel de emojis y «@settings» los ajustes). Deslizar hacia arriba abre las variantes de «up» + «holds» y al soltar se inserta la primera.</li>
+<li>«feat» activa funciones extra: ctrlLock, spaceCursor y pairs. En «lp» también puede ir un texto largo como macro, por ejemplo "../".</li><li>Con Ctrl o Alt activos, la siguiente tecla no escribe: queda registrada como combinación arriba del teclado.</li>
+</ul></details>
+</main>
+<script>
+const $=s=>document.querySelector(s),ta=$('#out'),kb=$('#kb'),wrap=$('#wrap');
+const L=s=>s.split("");
+const holds={a:"àâáäæ",e:"éèêë€",i:"îïíì",o:"ôóöœ",u:"ùûúü",c:"çć",n:"ñ",y:"ÿ",s:"ß",".":"…",",":"¿¡","?":"¿","!":"¡","-":"–—","'":"’‘",'"':"“”«»","/":"÷","=":"≠≈","<":"≤«",">":"≥»"};
+const TB2=[["@esc","@tab","/","\\","@home","@up","@end"],["@ctrl","@alt","_","-","@left","@down","@right"]];
+const SY3={A:L("()[]{}<>/\\"),B:L("@#$%&*-+=_"),C:L("!?:;\"'|"),S:[L("~^`€£¥¢°§¶"),L("¿¡«»…·×÷±¬"),L("≠≤≥≈∞√π∆∑∫"),L("←→↑↓⇒✓✗")]};
+const mk3=(TB,Y,c={})=>{const q=c.ly=="qwerty",D=L("1234567890"),vis=c.nums!==false,lt=q?[L("qwertyuiop"),L("asdfghjkl"),L("zxcvbnm")]:[L("azertyuiop"),L("qsdfghjklm"),[...L("wxcvbn"),"'"]],tb=c.bar===false?[]:TB,mr=vis?[D,...lt]:lt,pr=vis?[D,Y.A,Y.B,Y.C]:[D,Y.A,Y.C],sr=vis?Y.S:[Y.B,Y.S[0],Y.S[1].slice(0,7)];
+const u={};mr.forEach((r,i)=>r.forEach((k,j)=>{if(pr[i][j]&&pr[i][j]!==k)u[k]=pr[i][j]}));u[","]="@emoji";u["."]="@settings";
+const bt=x=>[`@go:${x}|1.4`,",","@space|5",".","@enter|1.4"],sy=(rows,t)=>[...rows.slice(0,-1),[`@go:${t}|1.4`,...rows[rows.length-1],"@bksp|1.4"]];
+return{bar:tb.length,holds,lp:u,layers:{abc:[...tb,...(vis?[D]:[]),lt[0],lt[1],["@shift|1.4",...lt[2],"@bksp|1.4"],bt("sym")],sym:[...tb,...sy(pr,"sym2"),bt("abc")],sym2:[...tb,...sy(sr,"sym"),bt("abc")]}}};
+const cfg={ly:"azerty",nums:true,bar:true,ac:"c",/* Default (antes "a"): el acento solo vive en la interacción */theme:"bluerose",vib:true,kh:46};
+const tapT={};
+const mk4=(TB,Y,c)=>{const r=mk3(TB,Y,c);r.feat={ctrlLock:1,spaceCursor:1,pairs:1};Object.assign(r.lp,{"/":"../","-":"--","&":"&&","|":" | ","@home":"~/"});return r};
+/* El acento ya no viaja en el preset: es un ajuste (cfg.ac, entrada "ac"
+   de OP). Un solo preset BlrsKeyboard; la comparación A/B/C vive en
+   Ajustes > Acento (sucesora de la vieja entrada "blrs", eliminada). */
+const PRE={blrs:mk4(TB2,SY3,cfg)};
+const SP={shift:"⇧",bksp:"⌫",del:"⌦",enter:"⏎",space:"",esc:"Esc",tab:"Tab",ctrl:"Ctrl",alt:"Alt",left:"←",right:"→",up:"↑",down:"↓",home:"Home",end:"End",pgup:"PgUp",pgdn:"PgDn",sym:"?123",sym2:"=\\<",num:"?123",abc:"ABC",fn:"Fn"};
+let lay=PRE.blrs,layer="abc",sh=0,mod={ctrl:0,alt:0},lastSh=0;
+const jt=()=>{$('#json').value='{\n "bar": '+(lay.bar||0)+',\n "feat": '+JSON.stringify(lay.feat||{})+',\n "holds": '+JSON.stringify(lay.holds||{})+',\n "up": '+JSON.stringify(lay.up||{})+',\n "lp": '+JSON.stringify(lay.lp||{})+',\n "layers": {\n'+Object.entries(lay.layers).map(([n,rows])=>'  "'+n+'": [\n'+rows.map(r=>'   '+JSON.stringify(r)).join(',\n')+'\n  ]').join(',\n')+'\n }\n}'};
+const isSp=t=>t.length>1&&t[0]=="@";
+const base=t=>t.split("|")[0];
+function opts(t){if(isSp(t))return[];const c=t.toLowerCase();const s=[...new Set(Array.from((lay.up?.[c]||"")+(lay.holds?.[c]||"")))];return s.map(x=>sh?x.toUpperCase():x)}
+function paint(){/* El ajuste "Acento" (cfg.ac) es la única fuente de verdad del data-accent; el JSON importado a mano (handler de #app) no lo toca: el ajuste sobrevive a cualquier layout. */wrap.dataset.accent=cfg.ac;kb.innerHTML="";const rows=lay.layers[layer]||[];rows.forEach((r,ri)=>{const d=document.createElement('div');d.className='row'+(ri<(lay.bar||0)?' tb':'');r.forEach(tk=>{const[t,w]=tk.split("|");const k=document.createElement('div');k.dataset.t=t;k.style.flex=(parseFloat(w)||1)+" 1 0";let c='k';
+if(isSp(t)){c+=' sp';const n=t.slice(1);if(n=="space")c+=' spc';/* gancho de estilo: deja al space neutral (tecla silenciosa, el :not(.spc) de los tintes) y porta el dash del indicador (.k.spc::after) */k.textContent=SP[n]??(n.startsWith("go:")?SP[n.slice(3)]||n.slice(3):n.toUpperCase());if(n=="shift"&&sh)c+=' act';if((n=="ctrl"||n=="alt")&&mod[n])c+=mod[n]==2?' act lock':' act';if(n=="shift"&&sh==2)k.textContent="⇪";const hm=lay.lp?.[t];if(hm&&hm[0]!="@"){const i=document.createElement('i');i.textContent=hm;k.append(i)}}
+else{k.textContent=sh?t.toUpperCase():t;const u=lay.lp?.[t.toLowerCase()]||lay.up?.[t.toLowerCase()];if(u&&(u[0]!="@"||ri==rows.length-1)){const i=document.createElement('i');i.textContent=u=="@emoji"?"☺":u=="@settings"?"⚙":u;k.append(i)}}
+k.className=c;d.append(k)});kb.append(d)})}
+function lg(s){const l=$('#log');const e=document.createElement('span');e.textContent=s;l.append(e);while(l.children.length>6)l.firstChild.remove()}
+function ins(s){ta.setRangeText(s,ta.selectionStart,ta.selectionEnd,'end');ta.focus()}
+function mv(p){ta.setSelectionRange(p,p);ta.focus()}
+function vert(d){const v=ta.value,p=ta.selectionStart,ls=p?v.lastIndexOf("\n",p-1)+1:0,col=p-ls;
+if(d<0){if(!ls)return mv(0);const ps=ls>=2?v.lastIndexOf("\n",ls-2)+1:0;mv(Math.min(ps+col,ls-1))}
+else{const le=v.indexOf("\n",p);if(le<0)return mv(v.length);const ne=v.indexOf("\n",le+1);mv(Math.min(le+1+col,ne<0?v.length:ne))}}
+function combo(n){const m=[mod.ctrl&&'Ctrl',mod.alt&&'Alt'].filter(Boolean);if(!m.length)return false;lg([...m,n].join('+'));if(mod.ctrl!=2)mod.ctrl=0;if(mod.alt!=2)mod.alt=0;paint();return true}
+const PAIR={"(":")","[":"]","{":"}",'"':'"',"`":"`"};
+function pairIns(c){const v=ta.value,p=ta.selectionStart,n=v[p];if(p!=ta.selectionEnd)return false;if(Object.values(PAIR).includes(c)&&n==c){mv(p+1);return true}if(PAIR[c]&&(!n||/[\s)\]}]/.test(n))){ins(c+PAIR[c]);mv(p+1);return true}return false}
+function emit(c){if(!combo(c.length==1?c.toUpperCase():c)&&!(lay.feat?.pairs&&c.length==1&&pairIns(c)))ins(c);if(sh==1){sh=0;paint()}}
+function press(t){
+if(!isSp(t))return emit(sh?t.toUpperCase():t);
+const n=t.slice(1);
+if(n.startsWith("go:")){layer=n.slice(3);return paint()}
+const A=f=>{if(!combo(SP[n]||n))f()};
+switch(n){
+case"emoji":return panel("emo");
+case"settings":return panel("cfg");
+case"shift":{const now=Date.now();sh=(sh==1&&now-lastSh<400)?2:(sh?0:1);lastSh=now;return paint()}
+case"ctrl":case"alt":{const now=Date.now();if(lay.feat?.ctrlLock&&mod[n]==1&&now-(tapT[n]||0)<400)mod[n]=2;else mod[n]=mod[n]?0:1;tapT[n]=now;if(layer=="fn")layer="abc";return paint()}
+case"bksp":return A(()=>{const v=ta.value,p0=ta.selectionStart;if(lay.feat?.pairs&&p0==ta.selectionEnd&&p0&&PAIR[v[p0-1]]===v[p0]){ta.setRangeText("",p0-1,p0+1,'end');ta.focus();return}if(ta.selectionStart!=ta.selectionEnd)ins("");else if(ta.selectionStart){ta.setRangeText("",ta.selectionStart-1,ta.selectionStart,'end');ta.focus()}});
+case"del":return A(()=>{const p=ta.selectionStart;if(p!=ta.selectionEnd)ins("");else{ta.setRangeText("",p,p+1,'end');ta.focus()}});
+case"enter":return A(()=>ins("\n"));
+case"space":return A(()=>ins(" "));
+case"tab":return A(()=>ins("\t"));
+case"left":return A(()=>mv(Math.max(0,ta.selectionStart-1)));
+case"right":return A(()=>mv(ta.selectionEnd+1));
+case"up":return A(()=>vert(-1));
+case"down":return A(()=>vert(1));
+case"home":return A(()=>{const p=ta.selectionStart;mv(p?ta.value.lastIndexOf("\n",p-1)+1:0)});
+case"end":return A(()=>{const p=ta.selectionStart,e=ta.value.indexOf("\n",p);mv(e<0?ta.value.length:e)});
+default:combo(SP[n]||n)||lg(SP[n]||n)}}
+const REP=["@bksp","@del","@left","@right","@up","@down"];
+let cur=null,tm,rp,pop=null,hl=null,sy=0,rep=false,done=false,swiped=0,sx=0,hd=0,an=0,vib=()=>cfg.vib&&navigator.vibrate&&navigator.vibrate(8);
+function stop(){clearTimeout(tm);clearInterval(rp)}
+function showPop(k,o){pop=document.createElement('div');pop.className='pop';o.forEach(x=>{const s=document.createElement('div');s.className='o';s.textContent=x;s.dataset.o=x;pop.append(s)});wrap.append(pop);
+const r=k.getBoundingClientRect(),w=wrap.getBoundingClientRect();pop.style.top=(r.top-w.top-54)+"px";
+pop.style.left=Math.max(0,Math.min(r.left-w.left+r.width/2-pop.offsetWidth/2,w.width-pop.offsetWidth))+"px";vib()}
+kb.addEventListener('pointerdown',e=>{const k=e.target.closest('.k');if(!k)return;e.preventDefault();cur=k;sy=e.clientY;rep=false;done=false;swiped=0;sx=e.clientX;hd=an=ta.selectionStart;k.classList.add('on');vib();
+const t=k.dataset.t;
+if(REP.includes(t)){rep=true;press(t);tm=setTimeout(()=>{rp=setInterval(()=>press(t),60)},400);return}
+const o=opts(t);let lp=lay.lp?.[t.toLowerCase()];if(lp&&lp[0]=="@"&&lp.length>1&&k.parentElement!==kb.lastElementChild)lp=0;
+if(lp)tm=setTimeout(()=>{lp[0]=="@"&&lp.length>1?press(lp):emit(lp);vib();done=true},300);else if(o.length)tm=setTimeout(()=>showPop(k,o),350)});
+addEventListener('pointermove',e=>{if(cur&&cur.dataset.t=="@space"&&lay.feat?.spaceCursor){const d=e.clientX-sx;if(Math.abs(d)>=14){const dr=Math.sign(d);sx+=dr*14;done=true;hd=Math.max(0,Math.min(ta.value.length,hd+dr));if(sh)ta.setSelectionRange(Math.min(an,hd),Math.max(an,hd));else{an=hd;ta.setSelectionRange(hd,hd)}ta.focus();vib()}return}
+if(cur&&!pop&&!done&&!rep&&sy-e.clientY>22){const o=opts(cur.dataset.t);if(o.length){clearTimeout(tm);showPop(cur,o);swiped=1;hl=pop.firstChild;hl.classList.add('h')}}
+if(!pop)return;const el=document.elementFromPoint(e.clientX,e.clientY)?.closest('.o');if(!el)return;if(hl)hl.classList.remove('h');hl=el;el.classList.add('h')});
+function end(e,ok){stop();if(!cur)return;const k=cur,t=k.dataset.t;cur=null;k.classList.remove('on');
+if(pop){const x=hl?hl.dataset.o:null;if(ok&&x)emit(x);pop.remove();pop=null;hl=null;return}
+if(done&&t=="@space"&&sh==1){sh=0;paint()}
+if(rep||done||!ok)return;
+const o=opts(t);if(o.length&&sy-e.clientY>26)emit(o[0]);else press(t)}
+addEventListener('pointerup',e=>end(e,1));addEventListener('pointercancel',e=>end(e,0));
+function load(p){lay=JSON.parse(JSON.stringify(p));layer=Object.keys(lay.layers)[0];sh=0;jt();paint()}
+$('#pre').onchange=e=>{if(e.target.value!="custom")load(PRE[e.target.value]);syncTbar()};
+$('#rst').onclick=()=>{load(PRE.blrs);$('#pre').value="blrs";$('#err').textContent="";syncTbar()};
+$('#app').onclick=()=>{try{const j=JSON.parse($('#json').value);if(!j.layers||typeof j.layers!="object")throw Error('Falta el objeto "layers".');for(const[n,rows]of Object.entries(j.layers))if(!Array.isArray(rows)||rows.some(r=>!Array.isArray(r)))throw Error('La capa "'+n+'" debe ser una lista de filas.');lay=j;layer=Object.keys(j.layers)[0];$('#pre').value="custom";$('#err').textContent="";paint()}catch(x){$('#err').textContent="JSON no válido: "+x.message}};
+$('#kh').oninput=e=>{cfg.kh=+e.target.value;wrap.style.setProperty('--kh',e.target.value+'px')};
+$('#clr').onclick=()=>{ta.value="";$('#log').innerHTML=""};
+const EM={"😀":"😀😃😄😁😆😅😂🤣🙂😉😊😍😘😋😜🤔😐🙄😏😴😎🤓😢😭😡🤯😱🥳🤗🙏👍👎👏🙌💪","🐱":"🐶🐱🐭🐹🐰🦊🐻🐼🐨🐯🦁🐮🐷🐸🐵🐔🐧🦉🦄🐝🦋🐢🐍🐙🐬🌵🌲🌸🌻🍀","🍔":"🍎🍌🍇🍓🍒🍑🥑🍅🥕🌽🍞🧀🍕🍔🍟🌮🍣🍜🍰🍪🍫🍩☕🍺🍷🥤","⚽":"⚽🏀🏈🎾🎮🎲🎯🎸🎧🎬🚗✈️🚀🚲🏠⏰📱💻⌨️🖥️🔧💡","❤️":"❤️🧡💛💚💙💜🖤💔💯✨🔥⭐🎉✅❌⚠️❓❗💬👀🧠"};
+const gr=s=>window.Intl&&Intl.Segmenter?[...new Intl.Segmenter().segment(s)].map(x=>x.segment):Array.from(s);
+let ec="😀";
+function remo(){$('#emo').innerHTML='<div class="tabs"><button id="eabc">ABC</button>'+Object.keys(EM).map(c=>`<button data-c="${c}"${c==ec?' class="sel"':''}>${c}</button>`).join('')+'<button id="ebk">⌫</button></div><div class="eg">'+gr(EM[ec]).map(e=>`<button>${e}</button>`).join('')+'</div>'}
+function panel(n){$('#emo').hidden=n!="emo";$('#cfg').hidden=n!="cfg";if(n=="emo")remo();if(n=="cfg")rcfg();
+/* El bento de Ajustes (4 filas de celdas) es más alto que el teclado: al
+   abrir, el wrap crece para mostrarlo ENTERO. Sin esto, el scroll interno
+   de #cfg esconde la fila 4 (Alto de tecla) tras un gesto que nadie
+   adivina — y en una captura no se ve nada de lo que queda abajo. Al
+   cerrar, el wrap vuelve al alto del teclado. El panel de emojis sí
+   entra en el alto del teclado: no hace falta tocarlo. */
+wrap.style.minHeight=n=="cfg"?$('#cfg').scrollHeight+"px":""}
+/* Panel de Ajustes como bento japonés (grilla de 3 columnas, gap 8):
+    fila 1 = Distribución (w4 → span 2, la celda ancha de la fila) + Números
+    (span 1 default), fila 2 = Acento (w6 → span 3, sola en su fila: es EL
+    ajuste del lab), fila 3 = Barra + Vibración + Tema (tres celdas de span
+    1), fila 4 = Alto de tecla (w6 → span 3, fijo en rcfg()). Las claves
+    internas de las opciones de Acento NO se renombran (a/b/c son estables
+    en cfg y CSS): solo cambian orden y etiquetas, y el default pasa a ser
+    "c" (Default). El ancho de celda decide también la orientación del seg
+    en rcfg(). */
+const OP=[["ly","配列","Distribución","w4",[["azerty","AZERTY"],["qwerty","QWERTY"]]],["nums","数字","Números","",[[true,"Fila visible"],[false,"Pulsación larga"]]],["ac","薔薇","Acento","w6",[["c","Default"],["a","Acento"],["b","Acento + detalles"]]],["bar","帯","Barra","",[[true,"Visible"],[false,"Oculta"]]],["vib","振動","Vibración","",[[true,"Sí"],[false,"No"]]],["theme","色","Tema","",[["bluerose","BlueRose"],["oled","OLED"],["thorn","Thorn"],["amethyst","AmethystBreeze"],["azure","AzureGuardian"]]]];
+/* El seg va en fila (horizontal) cuando la celda es ancha y las opciones
+   entran en una línea (2 o 3: Distribución w4, Acento w6); en celdas
+   angostas o con muchas opciones (Números, Barra, Vibración, Tema) va
+   apilado — "Pulsación larga" no cabe en un span 2 horizontal. */
+function rcfg(){$('#cfg').innerHTML='<div class="ph"><b>Ajustes</b><button id="cx">Cerrar</button></div><div class="bento">'+OP.map(([k,j,t,w,o])=>`<div class="tile${w?" "+w:""}"><i>${j}</i><h4>${t}</h4><div class="seg${w&&o.length<=3?" row":""}">${o.map(([v,l])=>`<button data-k="${k}" data-v="${v}"${String(cfg[k])==String(v)?' class="sel"':''}>${l}</button>`).join('')}</div></div>`).join('')+`<div class="tile w6"><i>高さ</i><h4>Alto de tecla · <span id="khv">${cfg.kh}px</span></h4><input id="kh2" type="range" min="38" max="64" value="${cfg.kh}"></div></div><p class="s">Distribución, números y barra aplican al preset BlrsKeyboard.</p>`}
+function rb(){if($('#pre').value=="blrs"){PRE.blrs=mk4(TB2,SY3,cfg);load(PRE.blrs)}}
+/* Toggle rápido de la barra en la vista principal; espejo del "Barra" de
+   Ajustes (misma limitación: solo reconstruye el preset BlrsKeyboard, por
+   eso queda deshabilitado en Personalizado). El label nunca debe mentir:
+   syncTbar corre en TODOS los puntos de mutación de cfg.bar / #pre. */
+function syncTbar(){$('#tbar').textContent='Barra: '+(cfg.bar?'sí':'no');$('#tbar').disabled=$('#pre').value!=='blrs'}
+$('#tbar').onclick=()=>{cfg.bar=!cfg.bar;rb();syncTbar()};
+$('#emo').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.id=="eabc")return panel("");if(b.id=="ebk")return press("@bksp");if(b.dataset.c){ec=b.dataset.c;return remo()}ins(b.textContent)});
+$('#cfg').addEventListener('input',e=>{if(e.target.id=="kh2"){cfg.kh=+e.target.value;wrap.style.setProperty('--kh',cfg.kh+'px');$('#kh').value=cfg.kh;$('#khv').textContent=cfg.kh+'px'}});
+$('#cfg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.id=="cx")return panel("");const k=b.dataset.k;if(!k)return;const v=b.dataset.v;cfg[k]=v=="true"?true:v=="false"?false:v;if(k=="theme"){/* BlrsDesign es dark-only: siempre hay variante; "bluerose" es el default y no tiene bloque CSS propio (el :root ya ES BlueRose) */document.documentElement.dataset.theme=cfg.theme}else if(k=="ac"){/* el acento NO reconstruye el layout: solo repinta el data-accent */wrap.dataset.accent=cfg.ac}else if(k!="vib")rb();rcfg();syncTbar()});
+load(PRE.blrs);$('#pre').value="blrs";syncTbar();
+/* Deep-link permanente: ...keylab-blrs-lab.html#ajustes abre el panel de
+   Ajustes al cargar (capturas y acceso directo). El hash no se limpia al
+   cerrar el panel: es una dirección, no un estado. */
+if(location.hash=="#ajustes")panel("cfg");
+</script></body></html>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    BlrsDesign tokens (from HTML)
+    Dark-only. No light theme variants.
+    -->
+    
+    <!-- Obsidian backgrounds -->
+    <color name="bg_primary">#FF121212</color>     <!-- obsidianBase -->
+    <color name="bg_secondary">#FF1E1E1E</color>   <!-- obsidianDeep -->
+    <color name="bg_tertiary">#FF2A2A2A</color>     <!-- obsidianSurface -->
+    <color name="bg_overlay">#FF1D1B33</color>      <!-- thorn800 - popups -->
+    
+    <!-- Borders -->
+    <color name="border_default">#FF333333</color>  <!-- obsidianEdge -->
+    <color name="border_subtle">#FF444444</color>   <!-- obsidianMist -->
+    <color name="border_focus">#FF3E83F5</color>    <!-- rose400 -->
+    
+    <!-- Text (Bloom) -->
+    <color name="text_primary">#FFFAFAFA</color>    <!-- bloomWhite -->
+    <color name="text_secondary">#FFE8E8E8</color>  <!-- bloomPale -->
+    <color name="text_tertiary">#FFCCCCCC</color>   <!-- bloomDusk -->
+    <color name="text_disabled">#FF504983</color>   <!-- thorn500 -->
+    
+    <!-- Accent (Rose - true blue, NO CYAN) -->
+    <color name="accent">#FF2D68D8</color>           <!-- rose500 -->
+    <color name="accent_secondary">#FF2452B8</color> <!-- rose600 -->
+    <color name="accent_tertiary">#FF6FA7FF</color>  <!-- rose300 Azure Spark -->
+    <color name="hover">#FF6FA7FF</color>            <!-- rose300 -->
+    <color name="focus">#FF3E83F5</color>            <!-- rose400 -->
+    <color name="accent_text">#FF0A0A0A</color>      <!-- obsidianNight - text on accent -->
+    
+    <!-- Signals -->
+    <color name="error">#FFE8384F</color>    <!-- signalRed -->
+    <color name="success">#FF2452B8</color>  <!-- rose600 -->
+    <color name="warning">#FF6FA7FF</color>  <!-- rose300 -->
+    <color name="info">#FF2D68D8</color>     <!-- rose500 -->
+    
+    <!-- Radius values (in dp, defined as integers for reference) -->
+    <integer name="radius_sm">2</integer>
+    <integer name="radius_md">4</integer>
+    <integer name="radius_panel">8</integer>
+</resources>

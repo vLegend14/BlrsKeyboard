@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="?attr/colorBackground">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+        
+        <!-- Installation card -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/install_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:cardBackgroundColor="@color/bg_secondary"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="0dp">
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_name"
+                    android:textSize="18sp"
+                    android:textColor="@color/text_primary"
+                    android:fontFamily="serif"
+                    android:layout_marginBottom="8dp" />
+                
+                <Button
+                    android:id="@+id/install_step1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/install_step1"
+                    android:textSize="12sp"
+                    style="@style/Widget.AppCompat.Button.Borderless" />
+                
+                <TextView
+                    android:id="@+id/install_step1_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/install_done"
+                    android:textColor="@color/accent"
+                    android:visibility="gone" />
+                
+                <Button
+                    android:id="@+id/install_step2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/install_step2"
+                    android:textSize="12sp"
+                    android:layout_marginTop="4dp"
+                    style="@style/Widget.AppCompat.Button.Borderless" />
+                
+                <TextView
+                    android:id="@+id/install_step2_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/install_done"
+                    android:textColor="@color/accent"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+        
+        <!-- Settings bento -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/panel_settings"
+            android:textSize="14sp"
+            android:textColor="@color/text_secondary"
+            android:fontFamily="monospace"
+            android:layout_marginBottom="8dp" />
+        
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="3"
+            android:rowCount="4"
+            android:alignmentMode="alignBounds"
+            android:useDefaultMargins="false">
+            
+            <!-- Row 1: Layout (w4) + Numbers -->
+            <androidx.cardview.widget.CardView
+                android:layout_columnSpan="2"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                app:cardBackgroundColor="@color/bg_tertiary"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="0dp"
+                android:layout_margin="4dp">
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cfg_layout_kanji"
+                        android:textSize="26sp"
+                        android:textColor="@color/text_tertiary"
+                        android:alpha="0.14" />
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cfg_layout"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_tertiary" />
+                    
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp">
+                        
+                        <Button
+                            android:id="@+id/layout_azerty"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/layout_azerty"
+                            android:textSize="12sp"
+                            style="@style/SettingsButton" />
+                        
+                        <Button
+                            android:id="@+id/layout_qwerty"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/layout_qwerty"
+                            android:textSize="12sp"
+                            android:layout_marginStart="4dp"
+                            style="@style/SettingsButton" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            
+            <androidx.cardview.widget.CardView
+                android:layout_columnSpan="1"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                app:cardBackgroundColor="@color/bg_tertiary"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="0dp"
+                android:layout_margin="4dp">
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cfg_numbers_kanji"
+                        android:textSize="26sp"
+                        android:textColor="@color/text_tertiary"
+                        android:alpha="0.14" />
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cfg_numbers"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_tertiary" />
+                    
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="8dp">
+                        
+                        <Button
+                            android:id="@+id/nums_visible"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/cfg_numbers_visible"
+                            android:textSize="12sp"
+                            style="@style/SettingsButton" />
+                        
+                        <Button
+                            android:id="@+id/nums_longpress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/cfg_numbers_longpress"
+                            android:textSize="12sp"
+                            android:layout_marginTop="4dp"
+                            style="@style/SettingsButton" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            
+            <!-- Row 2: Accent (w6, full row) -->
+            <androidx.cardview.widget.CardView
+                android:layout_columnSpan="3"
+                android:layout_rowWeight="1"
+                app:cardBackgroundColor="@color/bg_tertiary"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="0dp"
+                android:layout_margin="4dp">
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cfg_accent_kanji"
+                        android:textSize="26sp"
+                        android:textColor="@color/text_tertiary"
+                        android:alpha="0.14" />
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cfg_accent"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_tertiary" />
+                    
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp">
+                        
+                        <Button
+                            android:id="@+id/accent_default"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/cfg_accent_default"
+                            android:textSize="12sp"
+                            style="@style/SettingsButton" />
+                        
+                        <Button
+                            android:id="@+id/accent_accent"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/cfg_accent_accent"
+                            android:textSize="12sp"
+                            android:layout_marginStart="4dp"
+                            style="@style/SettingsButton" />
+                        
+                        <Button
+                            android:id="@+id/accent_details"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/cfg_accent_accent_details"
+                            android:textSize="12sp"
+                            android:layout_marginStart="4dp"
+                            style="@style/SettingsButton" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            
+            <!-- Row 3: Bar + Vibration + Theme -->
+            <androidx.cardview.widget.CardView
+                android:layout_columnSpan="1"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                app:cardBackgroundColor="@color/bg_tertiary"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="0dp"
+                android:layout_margin="4dp">
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cfg_bar_kanji"
+                        android:textSize="26sp"
+                        android:textColor="@color/text_tertiary"
+                        android:alpha="0.14" />
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cfg_bar"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_tertiary" />
+                    
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="8dp">
+                        
+                        <Button
+                            android:id="@+id/bar_visible"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/cfg_bar_visible"
+                            android:textSize="12sp"
+                            style="@style/SettingsButton" />
+                        
+                        <Button
+                            android:id="@+id/bar_hidden"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/cfg_bar_hidden"
+                            android:textSize="12sp"
+                            android:layout_marginTop="4dp"
+                            style="@style/SettingsButton" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            
+            <androidx.cardview.widget.CardView
+                android:layout_columnSpan="1"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                app:cardBackgroundColor="@color/bg_tertiary"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="0dp"
+                android:layout_margin="4dp">
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cfg_vibration_kanji"
+                        android:textSize="26sp"
+                        android:textColor="@color/text_tertiary"
+                        android:alpha="0.14" />
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cfg_vibration"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_tertiary" />
+                    
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="8dp">
+                        
+                        <Button
+                            android:id="@+id/vib_yes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/cfg_vibration_yes"
+                            android:textSize="12sp"
+                            style="@style/SettingsButton" />
+                        
+                        <Button
+                            android:id="@+id/vib_no"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/cfg_vibration_no"
+                            android:textSize="12sp"
+                            android:layout_marginTop="4dp"
+                            style="@style/SettingsButton" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            
+            <androidx.cardview.widget.CardView
+                android:layout_columnSpan="1"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                app:cardBackgroundColor="@color/bg_tertiary"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="0dp"
+                android:layout_margin="4dp">
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cfg_theme_kanji"
+                        android:textSize="26sp"
+                        android:textColor="@color/text_tertiary"
+                        android:alpha="0.14" />
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cfg_theme"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_tertiary" />
+                    
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="8dp">
+                        
+                        <Button
+                            android:id="@+id/theme_bluerose"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/theme_bluerose"
+                            android:textSize="12sp"
+                            style="@style/SettingsButton" />
+                        
+                        <Button
+                            android:id="@+id/theme_oled"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/theme_oled"
+                            android:textSize="12sp"
+                            android:layout_marginTop="4dp"
+                            style="@style/SettingsButton" />
+                        
+                        <Button
+                            android:id="@+id/theme_thorn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/theme_thorn"
+                            android:textSize="12sp"
+                            android:layout_marginTop="4dp"
+                            style="@style/SettingsButton" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            
+            <!-- Row 4: Key height (w6, full row) -->
+            <androidx.cardview.widget.CardView
+                android:layout_columnSpan="3"
+                android:layout_rowWeight="1"
+                app:cardBackgroundColor="@color/bg_tertiary"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="0dp"
+                android:layout_margin="4dp">
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cfg_keyheight_kanji"
+                        android:textSize="26sp"
+                        android:textColor="@color/text_tertiary"
+                        android:alpha="0.14" />
+                    
+                    <TextView
+                        android:id="@+id/key_height_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cfg_keyheight"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_tertiary" />
+                    
+                    <SeekBar
+                        android:id="@+id/key_height_slider"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:max="26"
+                        android:progressTint="@color/accent" />
+                    
+                    <TextView
+                        android:id="@+id/key_height_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="46px"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_secondary"
+                        android:fontFamily="monospace" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </GridLayout>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hint_note"
+            android:textSize="12sp"
+            android:textColor="@color/text_tertiary"
+            android:fontFamily="monospace"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp" />
+        
+        <!-- Preview section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vista previa"
+            android:textSize="14sp"
+            android:textColor="@color/text_secondary"
+            android:fontFamily="monospace"
+            android:layout_marginBottom="8dp" />
+        
+        <EditText
+            android:id="@+id/preview_text"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:background="@color/bg_secondary"
+            android:padding="8dp"
+            android:textSize="16sp"
+            android:textColor="@color/text_primary"
+            android:fontFamily="monospace"
+            android:inputType="textMultiLine"
+            android:gravity="top|start"
+            android:hint="Probá el teclado..."
+            android:textColorHint="@color/text_tertiary" />
+        
+        <dev.blrs.keyboard.ui.KeyboardView
+            android:id="@+id/keyboard_preview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/bg_secondary" />
+        
+    </LinearLayout>
+</ScrollView>

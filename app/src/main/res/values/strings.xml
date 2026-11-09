@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BlrsKeyboard</string>
+    <string name="subtype_label">BlrsKeyboard</string>
+    
+    <!-- Installation card -->
+    <string name="install_step1">Activar BlrsKeyboard</string>
+    <string name="install_step2">Seleccionar como teclado</string>
+    <string name="install_done">✓</string>
+    
+    <!-- Settings labels (from OP in HTML) -->
+    <string name="cfg_layout">Distribución</string>
+    <string name="cfg_layout_kanji">配列</string>
+    
+    <string name="cfg_numbers">Números</string>
+    <string name="cfg_numbers_kanji">数字</string>
+    <string name="cfg_numbers_visible">Fila visible</string>
+    <string name="cfg_numbers_longpress">Pulsación larga</string>
+    
+    <string name="cfg_accent">Acento</string>
+    <string name="cfg_accent_kanji">薔薇</string>
+    <string name="cfg_accent_default">Default</string>
+    <string name="cfg_accent_accent">Acento</string>
+    <string name="cfg_accent_accent_details">Acento + detalles</string>
+    
+    <string name="cfg_bar">Barra</string>
+    <string name="cfg_bar_kanji">帯</string>
+    <string name="cfg_bar_visible">Visible</string>
+    <string name="cfg_bar_hidden">Oculta</string>
+    
+    <string name="cfg_vibration">Vibración</string>
+    <string name="cfg_vibration_kanji">振動</string>
+    <string name="cfg_vibration_yes">Sí</string>
+    <string name="cfg_vibration_no">No</string>
+    
+    <string name="cfg_theme">Tema</string>
+    <string name="cfg_theme_kanji">色</string>
+    
+    <string name="cfg_keyheight">Alto de tecla</string>
+    <string name="cfg_keyheight_kanji">高さ</string>
+    
+    <!-- Theme names -->
+    <string name="theme_bluerose">BlueRose</string>
+    <string name="theme_oled">OLED</string>
+    <string name="theme_thorn">Thorn</string>
+    <string name="theme_amethyst">AmethystBreeze</string>
+    <string name="theme_azure">AzureGuardian</string>
+    
+    <!-- Layout options -->
+    <string name="layout_azerty">AZERTY</string>
+    <string name="layout_qwerty">QWERTY</string>
+    
+    <!-- Panel -->
+    <string name="panel_settings">Ajustes</string>
+    <string name="panel_close">Cerrar</string>
+    
+    <!-- Hint text -->
+    <string name="hint_note">Distribución, números y barra aplican al preset BlrsKeyboard.</string>
+</resources>

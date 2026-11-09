@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Settings button style -->
+    <style name="SettingsButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:background">@color/bg_secondary</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:layout_margin">0dp</item>
+    </style>
+    
+    <!-- Selected state for settings buttons -->
+    <style name="SettingsButton.Selected">
+        <item name="android:background">@color/accent</item>
+        <item name="android:textColor">@color/accent_text</item>
+    </style>
+</resources>

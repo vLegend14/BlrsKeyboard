@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- Keyboard icon with rose accent -->
+    <path
+        android:fillColor="#2A2A2A"
+        android:pathData="M24,28 L84,28 Q88,28 88,32 L88,76 Q88,80 84,80 L24,80 Q20,80 20,76 L20,32 Q20,28 24,28 Z"/>
+    
+    <!-- Key rows -->
+    <path
+        android:fillColor="#121212"
+        android:pathData="M24,36 L84,36 L84,48 L24,48 Z"/>
+    
+    <!-- Rose accent line (the "rose" of BlueRose) -->
+    <path
+        android:fillColor="#2D68D8"
+        android:pathData="M48,58 L60,58 L60,72 L48,72 Z"/>
+</vector>
