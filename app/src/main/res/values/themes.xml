@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Base theme: Dark-only (no light theme) -->
-    <style name="Theme.BlrsKeyboard" parent="Theme.AppCompat.NoActionBar">
+    <style name="Theme.BlrsKeyboard" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Obsidian backgrounds -->
         <item name="android:colorBackground">@color/bg_primary</item>
         <item name="colorBackgroundFloating">@color/bg_secondary</item>
+        <item name="colorSurface">@color/bg_secondary</item>
         
         <!-- Text colors -->
         <item name="android:textColorPrimary">@color/text_primary</item>
@@ -14,6 +15,8 @@
         <!-- Accent -->
         <item name="colorAccent">@color/accent</item>
         <item name="colorPrimary">@color/accent</item>
+        <item name="colorPrimaryDark">@color/accent_secondary</item>
+        <item name="colorSecondary">@color/accent</item>
         
         <!-- No action bar -->
         <item name="windowActionBar">false</item>
