@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!-- No INTERNET permission - offline only, no telemetry -->
+    <uses-permission android:name="android.permission.VIBRATE" />
     
     <application
         android:allowBackup="true"

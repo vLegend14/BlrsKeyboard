@@ -93,9 +93,12 @@
             
             <!-- Row 1: Layout (w4) + Numbers -->
             <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_columnSpan="2"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
+                android:layout_gravity="fill"
                 app:cardBackgroundColor="@color/bg_tertiary"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"
@@ -208,8 +211,12 @@
             
             <!-- Row 2: Accent (w6, full row) -->
             <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_columnSpan="3"
+                android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
+                android:layout_gravity="fill"
                 app:cardBackgroundColor="@color/bg_tertiary"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"
@@ -276,9 +283,12 @@
             
             <!-- Row 3: Bar + Vibration + Theme -->
             <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_columnSpan="1"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
+                android:layout_gravity="fill"
                 app:cardBackgroundColor="@color/bg_tertiary"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"
@@ -332,9 +342,12 @@
             </androidx.cardview.widget.CardView>
             
             <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_columnSpan="1"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
+                android:layout_gravity="fill"
                 app:cardBackgroundColor="@color/bg_tertiary"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"
@@ -388,9 +401,12 @@
             </androidx.cardview.widget.CardView>
             
             <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_columnSpan="1"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
+                android:layout_gravity="fill"
                 app:cardBackgroundColor="@color/bg_tertiary"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"

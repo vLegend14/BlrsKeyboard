@@ -17,27 +17,27 @@ import dev.blrs.keyboard.settings.SettingsRepository
  */
 class InputConnectionSink(
     private val context: Context,
-    private val inputConnection: InputConnection?,
-    private val editorInfo: EditorInfo?
+    private val getInputConnection: () -> InputConnection?,
+    private val getEditorInfo: () -> EditorInfo?
 ) : KeySink {
     
     private val settings = SettingsRepository.getInstance(context)
     private val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
     
     override fun commitText(text: String) {
-        inputConnection?.commitText(text, 1)
+        getInputConnection()?.commitText(text, 1)
     }
     
     override fun deleteBeforeCursor(count: Int) {
-        inputConnection?.deleteSurroundingText(count, 0)
+        getInputConnection()?.deleteSurroundingText(count, 0)
     }
     
     override fun deleteAfterCursor(count: Int) {
-        inputConnection?.deleteSurroundingText(0, count)
+        getInputConnection()?.deleteSurroundingText(0, count)
     }
     
     override fun setSelection(position: Int) {
-        inputConnection?.setSelection(position, position)
+        getInputConnection()?.setSelection(position, position)
     }
     
     override fun moveCursor(delta: Int) {
@@ -48,7 +48,7 @@ class InputConnectionSink(
     override fun extendSelection(delta: Int) {
         val (start, end) = getSelection()
         val newEnd = end + delta
-        inputConnection?.setSelection(start, newEnd)
+        getInputConnection()?.setSelection(start, newEnd)
     }
     
     override fun getCursorPosition(): Int {
@@ -57,7 +57,7 @@ class InputConnectionSink(
     }
     
     override fun getSelection(): Pair<Int, Int> {
-        val extracted = inputConnection?.getExtractedText(ExtractedTextRequest(), 0)
+        val extracted = getInputConnection()?.getExtractedText(ExtractedTextRequest(), 0)
         return Pair(
             extracted?.selectionStart ?: 0,
             extracted?.selectionEnd ?: 0
@@ -78,7 +78,7 @@ class InputConnectionSink(
             0,
             metaState
         )
-        inputConnection?.sendKeyEvent(event)
+        getInputConnection()?.sendKeyEvent(event)
     }
     
     /**
@@ -86,11 +86,11 @@ class InputConnectionSink(
      * Si no hay acción específica, inserta salto de línea.
      */
     override fun performEditorAction(actionCode: Int) {
-        val imeOptions = editorInfo?.imeOptions ?: 0
+        val imeOptions = getEditorInfo()?.imeOptions ?: 0
         
         // Si hay acción de editor, ejecutarla
         if (imeOptions and EditorInfo.IME_MASK_ACTION != EditorInfo.IME_ACTION_NONE) {
-            inputConnection?.performEditorAction(imeOptions and EditorInfo.IME_MASK_ACTION)
+            getInputConnection()?.performEditorAction(imeOptions and EditorInfo.IME_MASK_ACTION)
         } else {
             // Sin acción: salto de línea normal
             commitText("\n")
@@ -110,8 +110,12 @@ class InputConnectionSink(
     }
     
     override fun vibrate(durationMs: Long) {
-        if (settings.vibrationEnabled && vibrator?.hasVibrator() == true) {
-            vibrator.vibrate(VibrationEffect.createOneShot(durationMs, VibrationEffect.DEFAULT_AMPLITUDE))
+        try {
+            if (settings.vibrationEnabled && vibrator?.hasVibrator() == true) {
+                vibrator.vibrate(VibrationEffect.createOneShot(durationMs, VibrationEffect.DEFAULT_AMPLITUDE))
+            }
+        } catch (e: Exception) {
+            // Ignore vibration errors to prevent service crashes
         }
     }
     

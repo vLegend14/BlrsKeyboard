@@ -67,6 +67,8 @@ class KeyboardView @JvmOverloads constructor(
     private var pressStartX = 0f
     private var hasTriggeredLongPress = false
     private var isRepeating = false
+    private var repeatStarted = false
+    private var touchId = 0
     private var cursorDragStart = 0
     private var cursorDragAnchor = 0
     
@@ -77,7 +79,7 @@ class KeyboardView @JvmOverloads constructor(
     
     private val repeatRunnable = object : Runnable {
         override fun run() {
-            if (isRepeating && activeKey != null) {
+            if (isRepeating && repeatStarted && activeKey != null) {
                 handleKeyPress(activeKey!!)
                 postDelayed(this, 60)
             }
@@ -123,10 +125,16 @@ class KeyboardView @JvmOverloads constructor(
         invalidate()
     }
     
+    private fun rowUnitWidth(row: KeyRow, keySpacing: Float): Float {
+        val weight = row.keys.sumOf { it.width.toDouble() }.toFloat()
+        val total = width - paddingStart - paddingEnd - (row.keys.size - 1) * keySpacing
+        return if (weight > 0f) total / weight else 0f
+    }
+    
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val width = MeasureSpec.getSize(widthMeasureSpec)
         val rows = currentLayer?.rows?.size ?: 0
-        val height = rows * keyHeightPx + (rows - 1) * dpToPx(4) + paddingTop + paddingBottom
+        val height = if (rows == 0) 0 else rows * keyHeightPx + (rows - 1) * dpToPx(4) + paddingTop + paddingBottom
         setMeasuredDimension(width, height)
     }
     
@@ -141,11 +149,10 @@ class KeyboardView @JvmOverloads constructor(
         
         layer.rows.forEachIndexed { rowIndex, row ->
             var x = paddingStart.toFloat()
-            val totalWidth = width - paddingStart - paddingEnd - (row.keys.size - 1) * keySpacing
-            val keyWidth = totalWidth / row.keys.size
+            val unit = rowUnitWidth(row, keySpacing)
             
             row.keys.forEachIndexed { keyIndex, key ->
-                val actualWidth = keyWidth * key.width + (key.width - 1) * keySpacing
+                val actualWidth = unit * key.width
                 val rect = RectF(x, y, x + actualWidth, y + keyHeightPx)
                 
                 drawKey(canvas, rect, key, rowIndex, keyIndex)
@@ -378,10 +385,13 @@ class KeyboardView @JvmOverloads constructor(
     }
     
     private fun handlePointerDown(event: MotionEvent) {
-        val x = event.x
-        val y = event.y
+        val actionIndex = event.actionIndex
+        val x = event.getX(actionIndex)
+        val y = event.getY(actionIndex)
         
         val (rowIndex, keyIndex, key) = findKeyAt(x, y) ?: return
+        
+        val currentTouchId = ++touchId
         
         activeKey = key
         activeRowIndex = rowIndex
@@ -391,6 +401,7 @@ class KeyboardView @JvmOverloads constructor(
         pressStartX = x
         hasTriggeredLongPress = false
         isRepeating = false
+        repeatStarted = false
         
         sink?.vibrate()
         invalidate()
@@ -398,14 +409,20 @@ class KeyboardView @JvmOverloads constructor(
         // Iniciar repetición si es tecla repetible
         if (isRepeatable(key)) {
             isRepeating = true
-            postDelayed(repeatRunnable, 400)
+            postDelayed({
+                if (activeKey == key && touchId == currentTouchId) {
+                    repeatStarted = true
+                    handleKeyPress(key)
+                    postDelayed(repeatRunnable, 60)
+                }
+            }, 400)
         }
         
         // Iniciar long-press
         val lp = layout?.lp?.get(key.label.lowercase())
         if (lp != null || hasVariants(key)) {
             postDelayed({
-                if (activeKey == key && !isRepeating) {
+                if (activeKey == key && touchId == currentTouchId && !repeatStarted) {
                     if (lp != null && !lp.startsWith("@")) {
                         // Long-press directo
                         commitText(lp)
@@ -422,10 +439,13 @@ class KeyboardView @JvmOverloads constructor(
     
     private fun handleMove(event: MotionEvent) {
         val key = activeKey ?: return
+        val actionIndex = event.actionIndex
+        val x = event.getX(actionIndex)
+        val y = event.getY(actionIndex)
         
         // Space drag cursor
         if (key.getSpecialName() == "space" && layout?.feat?.spaceCursor == true) {
-            val dx = event.x - pressStartX
+            val dx = x - pressStartX
             if (abs(dx) >= dpToPx(14)) {
                 val steps = (dx / dpToPx(14)).toInt()
                 pressStartX += steps * dpToPx(14)
@@ -441,19 +461,19 @@ class KeyboardView @JvmOverloads constructor(
         }
         
         // Swipe up para variantes
-        if (pressStartY - event.y > dpToPx(22) && hasVariants(key) && !hasTriggeredLongPress) {
+        if (pressStartY - y > dpToPx(22) && hasVariants(key) && !hasTriggeredLongPress) {
             removeCallbacks(repeatRunnable)
-            showVariantsPopup(key, event.x, pressStartY - dpToPx(54))
+            showVariantsPopup(key, x, pressStartY - dpToPx(54))
             hasTriggeredLongPress = true
         }
         
         // Selección en popup
         popupVariants?.let { variants ->
             val popupRect = popupRect ?: return@let
-            if (event.x >= popupRect.left && event.x <= popupRect.right &&
-                event.y >= popupRect.top && event.y <= popupRect.bottom) {
+            if (x >= popupRect.left && x <= popupRect.right &&
+                y >= popupRect.top && y <= popupRect.bottom) {
                 val variantWidth = dpToPx(42) + dpToPx(4)
-                val relativeX = event.x - popupRect.left - dpToPx(4)
+                val relativeX = x - popupRect.left - dpToPx(4)
                 val newIndex = (relativeX / variantWidth).toInt().coerceIn(0, variants.size - 1)
                 if (newIndex != popupSelectedIndex) {
                     popupSelectedIndex = newIndex
@@ -468,6 +488,7 @@ class KeyboardView @JvmOverloads constructor(
         val key = activeKey ?: return
         
         removeCallbacks(repeatRunnable)
+        repeatStarted = false
         
         // Popup activo
         popupVariants?.let { variants ->
@@ -479,7 +500,7 @@ class KeyboardView @JvmOverloads constructor(
             return
         }
         
-        if (!hasTriggeredLongPress && !isRepeating) {
+        if (!hasTriggeredLongPress && !repeatStarted) {
             handleKeyPress(key)
         }
         
@@ -668,13 +689,63 @@ class KeyboardView @JvmOverloads constructor(
             // Combinación con modificador
             val metaState = buildMetaState()
             text.firstOrNull()?.let { char ->
-                val keyCode = char.code
-                sink?.sendKeyEvent(keyCode, metaState, true)
-                sink?.sendKeyEvent(keyCode, metaState, false)
+                val keyCode = charToKeyCode(char)
+                if (keyCode != KeyEvent.KEYCODE_UNKNOWN) {
+                    sink?.sendKeyEvent(keyCode, metaState, true)
+                    sink?.sendKeyEvent(keyCode, metaState, false)
+                } else {
+                    // Fallback: commit sin modificador
+                    sink?.commitText(text)
+                }
             }
             clearModifiers()
         } else {
             sink?.commitText(text)
+        }
+    }
+    
+    private fun charToKeyCode(char: Char): Int {
+        return when (char.lowercaseChar()) {
+            'a' -> KeyEvent.KEYCODE_A
+            'b' -> KeyEvent.KEYCODE_B
+            'c' -> KeyEvent.KEYCODE_C
+            'd' -> KeyEvent.KEYCODE_D
+            'e' -> KeyEvent.KEYCODE_E
+            'f' -> KeyEvent.KEYCODE_F
+            'g' -> KeyEvent.KEYCODE_G
+            'h' -> KeyEvent.KEYCODE_H
+            'i' -> KeyEvent.KEYCODE_I
+            'j' -> KeyEvent.KEYCODE_J
+            'k' -> KeyEvent.KEYCODE_K
+            'l' -> KeyEvent.KEYCODE_L
+            'm' -> KeyEvent.KEYCODE_M
+            'n' -> KeyEvent.KEYCODE_N
+            'o' -> KeyEvent.KEYCODE_O
+            'p' -> KeyEvent.KEYCODE_P
+            'q' -> KeyEvent.KEYCODE_Q
+            'r' -> KeyEvent.KEYCODE_R
+            's' -> KeyEvent.KEYCODE_S
+            't' -> KeyEvent.KEYCODE_T
+            'u' -> KeyEvent.KEYCODE_U
+            'v' -> KeyEvent.KEYCODE_V
+            'w' -> KeyEvent.KEYCODE_W
+            'x' -> KeyEvent.KEYCODE_X
+            'y' -> KeyEvent.KEYCODE_Y
+            'z' -> KeyEvent.KEYCODE_Z
+            '0' -> KeyEvent.KEYCODE_0
+            '1' -> KeyEvent.KEYCODE_1
+            '2' -> KeyEvent.KEYCODE_2
+            '3' -> KeyEvent.KEYCODE_3
+            '4' -> KeyEvent.KEYCODE_4
+            '5' -> KeyEvent.KEYCODE_5
+            '6' -> KeyEvent.KEYCODE_6
+            '7' -> KeyEvent.KEYCODE_7
+            '8' -> KeyEvent.KEYCODE_8
+            '9' -> KeyEvent.KEYCODE_9
+            ' ' -> KeyEvent.KEYCODE_SPACE
+            '\n' -> KeyEvent.KEYCODE_ENTER
+            '\t' -> KeyEvent.KEYCODE_TAB
+            else -> KeyEvent.KEYCODE_UNKNOWN
         }
     }
     
@@ -749,12 +820,11 @@ class KeyboardView @JvmOverloads constructor(
         
         layer.rows.forEachIndexed { rowIndex, row ->
             var currentX = paddingStart.toFloat()
-            val totalWidth = width - paddingStart - paddingEnd - (row.keys.size - 1) * keySpacing
-            val keyWidth = totalWidth / row.keys.size
+            val unit = rowUnitWidth(row, keySpacing)
             
             if (y >= currentY && y < currentY + keyHeightPx) {
                 row.keys.forEachIndexed { keyIndex, key ->
-                    val actualWidth = keyWidth * key.width + (key.width - 1) * keySpacing
+                    val actualWidth = unit * key.width
                     
                     if (x >= currentX && x < currentX + actualWidth) {
                         return Triple(rowIndex, keyIndex, key)

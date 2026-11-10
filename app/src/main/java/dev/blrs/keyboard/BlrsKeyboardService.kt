@@ -77,31 +77,33 @@ class BlrsKeyboardService : InputMethodService() {
         containerView?.addView(keyboardView)
         containerView?.addView(emojiPanel)
         
+        // Crear sink con lambdas para obtener referencias actualizadas
+        sink = InputConnectionSink(
+            applicationContext,
+            { currentInputConnection },
+            { currentInputEditorInfo }
+        )
+        
+        keyboardView?.setKeySink(sink!!)
+        emojiPanel?.setKeySink(sink!!)
+        
         return containerView!!
     }
     
-    override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {
-        super.onStartInput(attribute, restarting)
+    override fun onStartInputView(editorInfo: EditorInfo?, restarting: Boolean) {
+        super.onStartInputView(editorInfo, restarting)
         
-        sink = InputConnectionSink(
-            applicationContext,
-            currentInputConnection,
-            attribute
-        )
-        
-        keyboardView?.setKeySink(sink)
-        emojiPanel?.setKeySink(sink!!)
-        
-        // Construir layout inicial
-        rebuildLayout()
+        // Construir layout inicial si no existe
+        if (currentLayout == null) {
+            rebuildLayout()
+        }
         
         // Respetar inputType
-        handleInputType(attribute?.inputType ?: 0)
+        handleInputType(editorInfo?.inputType ?: 0)
     }
     
     override fun onFinishInput() {
         super.onFinishInput()
-        sink = null
     }
     
     override fun onDestroy() {
