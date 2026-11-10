@@ -20,42 +20,42 @@ class InputConnectionSink(
     private val getInputConnection: () -> InputConnection?,
     private val getEditorInfo: () -> EditorInfo?
 ) : KeySink {
-    
+
     private val settings = SettingsRepository.getInstance(context)
     private val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
-    
+
     override fun commitText(text: String) {
         getInputConnection()?.commitText(text, 1)
     }
-    
+
     override fun deleteBeforeCursor(count: Int) {
         getInputConnection()?.deleteSurroundingText(count, 0)
     }
-    
+
     override fun deleteAfterCursor(count: Int) {
         getInputConnection()?.deleteSurroundingText(0, count)
     }
-    
+
     override fun setSelection(position: Int) {
         getInputConnection()?.setSelection(position, position)
     }
-    
+
     override fun moveCursor(delta: Int) {
         val current = getCursorPosition()
         setSelection(current + delta)
     }
-    
+
     override fun extendSelection(delta: Int) {
         val (start, end) = getSelection()
         val newEnd = end + delta
         getInputConnection()?.setSelection(start, newEnd)
     }
-    
+
     override fun getCursorPosition(): Int {
         val (start, end) = getSelection()
         return if (start == end) start else end
     }
-    
+
     override fun getSelection(): Pair<Int, Int> {
         val extracted = getInputConnection()?.getExtractedText(ExtractedTextRequest(), 0)
         return Pair(
@@ -63,7 +63,7 @@ class InputConnectionSink(
             extracted?.selectionEnd ?: 0
         )
     }
-    
+
     /**
      * Envía un KeyEvent real con metaState para Ctrl, Alt y Shift.
      * CRÍTICO para Termux y otras apps de terminal.
@@ -80,14 +80,14 @@ class InputConnectionSink(
         )
         getInputConnection()?.sendKeyEvent(event)
     }
-    
+
     /**
      * Ejecuta la acción de Enter según ImeOptions.
      * Si no hay acción específica, inserta salto de línea.
      */
     override fun performEditorAction(actionCode: Int) {
         val imeOptions = getEditorInfo()?.imeOptions ?: 0
-        
+
         // Si hay acción de editor, ejecutarla
         if (imeOptions and EditorInfo.IME_MASK_ACTION != EditorInfo.IME_ACTION_NONE) {
             getInputConnection()?.performEditorAction(imeOptions and EditorInfo.IME_MASK_ACTION)
@@ -96,19 +96,19 @@ class InputConnectionSink(
             commitText("\n")
         }
     }
-    
+
     override fun getInputType(): Int {
-        return editorInfo?.inputType ?: 0
+        return getEditorInfo()?.inputType ?: 0
     }
-    
+
     override fun getImeOptions(): Int {
-        return editorInfo?.imeOptions ?: 0
+        return getEditorInfo()?.imeOptions ?: 0
     }
-    
+
     override fun onLayerChange(layerName: String) {
         // TODO: notificar al servicio del cambio de capa si es necesario
     }
-    
+
     override fun vibrate(durationMs: Long) {
         try {
             if (settings.vibrationEnabled && vibrator?.hasVibrator() == true) {
@@ -118,7 +118,7 @@ class InputConnectionSink(
             // Ignore vibration errors to prevent service crashes
         }
     }
-    
+
     companion object {
         /**
          * Constantes de metaState para KeyEvents
