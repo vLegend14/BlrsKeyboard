@@ -448,6 +448,24 @@
                             android:textSize="12sp"
                             android:layout_marginTop="4dp"
                             style="@style/SettingsButton" />
+                        
+                        <Button
+                            android:id="@+id/theme_amethyst"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/theme_amethyst"
+                            android:textSize="12sp"
+                            android:layout_marginTop="4dp"
+                            style="@style/SettingsButton" />
+                        
+                        <Button
+                            android:id="@+id/theme_azure"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/theme_azure"
+                            android:textSize="12sp"
+                            android:layout_marginTop="4dp"
+                            style="@style/SettingsButton" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

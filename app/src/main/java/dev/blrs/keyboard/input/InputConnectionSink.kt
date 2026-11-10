@@ -5,6 +5,7 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import dev.blrs.keyboard.settings.SettingsRepository
 
@@ -56,7 +57,7 @@ class InputConnectionSink(
     }
     
     override fun getSelection(): Pair<Int, Int> {
-        val extracted = inputConnection?.getExtractedText(0, 0)
+        val extracted = inputConnection?.getExtractedText(ExtractedTextRequest(), 0)
         return Pair(
             extracted?.selectionStart ?: 0,
             extracted?.selectionEnd ?: 0

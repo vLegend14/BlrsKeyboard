@@ -3,8 +3,10 @@ package dev.blrs.keyboard.ui
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
+import dev.blrs.keyboard.input.InputConnectionSink
 import dev.blrs.keyboard.input.KeySink
 import dev.blrs.keyboard.model.*
 import dev.blrs.keyboard.settings.SettingsRepository
@@ -713,7 +715,7 @@ class KeyboardView @JvmOverloads constructor(
         val holds = layout?.holds?.get(char) ?: ""
         val up = layout?.up?.get(char) ?: ""
         
-        val variants = (holds + up).toSet().toList()
+        val variants = (holds + up).toSet().map { it.toString() }
         if (variants.isEmpty()) return
         
         popupVariants = if (shiftState > 0) variants.map { it.uppercase() } else variants

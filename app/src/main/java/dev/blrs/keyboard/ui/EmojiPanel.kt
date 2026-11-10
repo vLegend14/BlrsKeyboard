@@ -2,6 +2,8 @@ package dev.blrs.keyboard.ui
 
 import android.content.Context
 import android.graphics.*
+import android.view.Gravity
+import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
@@ -67,7 +69,7 @@ class EmojiPanel(context: Context) : LinearLayout(context) {
     }
     
     private var sink: KeySink? = null
-    private var theme: BlrsDesign = BlrsDesign.DEFAULT
+    private var theme: BlrsDesign = BlrsDesign.BLUE_ROSE
     
     private var currentCategory = 0
     private var currentPage = 0
@@ -181,7 +183,7 @@ class EmojiPanel(context: Context) : LinearLayout(context) {
             setPadding(dpToPx(16), 0, dpToPx(16), 0)
             layoutParams = LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f)
             setOnClickListener {
-                sink?.sendKey(android.view.KeyEvent.KEYCODE_DEL)
+                sink?.sendKeyEvent(KeyEvent.KEYCODE_DEL)
             }
         }
         bottomBar.addView(backspaceButton)
@@ -227,7 +229,7 @@ class EmojiPanel(context: Context) : LinearLayout(context) {
         
         emojiGrid.setOnItemClickListener { _, _, position, _ ->
             val emoji = pageEmojis[position]
-            sink?.sendText(emoji)
+            sink?.commitText(emoji)
         }
     }
     
@@ -255,9 +257,9 @@ class EmojiPanel(context: Context) : LinearLayout(context) {
     
     fun setTheme(theme: BlrsDesign) {
         this.theme = theme
-        setBackgroundColor(Color.parseColor(theme.colors.bgPrimary))
-        categoryBar.setBackgroundColor(Color.parseColor(theme.colors.bgSecondary))
-        bottomBar.setBackgroundColor(Color.parseColor(theme.colors.bgSecondary))
+        setBackgroundColor(theme.bgPrimary)
+        categoryBar.setBackgroundColor(theme.bgSecondary)
+        bottomBar.setBackgroundColor(theme.bgSecondary)
     }
     
     private fun dpToPx(dp: Int): Int {
