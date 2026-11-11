@@ -87,16 +87,14 @@ class BlrsKeyboardService : InputMethodService() {
         keyboardView?.setKeySink(sink!!)
         emojiPanel?.setKeySink(sink!!)
         
+        // Construir layout inicial para que la vista nazca con su alto final
+        rebuildLayout()
+        
         return containerView!!
     }
     
     override fun onStartInputView(editorInfo: EditorInfo?, restarting: Boolean) {
         super.onStartInputView(editorInfo, restarting)
-        
-        // Construir layout inicial si no existe
-        if (currentLayout == null) {
-            rebuildLayout()
-        }
         
         // Respetar inputType
         handleInputType(editorInfo?.inputType ?: 0)
@@ -131,6 +129,7 @@ class BlrsKeyboardService : InputMethodService() {
         var theme = BlrsDesign.fromName(repo.themeName)
         theme = theme.withAccentOption(repo.accentOption)
         
+        containerView?.setBackgroundColor(theme.bgPrimary)
         keyboardView?.setTheme(theme)
         emojiPanel?.setTheme(theme)
     }
@@ -160,7 +159,6 @@ class BlrsKeyboardService : InputMethodService() {
             InputType.TYPE_CLASS_NUMBER,
             InputType.TYPE_CLASS_PHONE -> {
                 // Entrada numérica: abrir directo la capa de símbolos
-                keyboardView?.setLayout(currentLayout!!)
                 // TODO: cambiar a capa sym automáticamente
             }
             InputType.TYPE_TEXT_VARIATION_PASSWORD -> {

@@ -86,7 +86,7 @@ object BlrsKeyboardPreset {
             abcRows.add(digits)
         }
         
-        textRows.forEach { row ->
+        textRows.dropLast(1).forEach { row ->
             abcRows.add(row)
         }
         
@@ -108,11 +108,10 @@ object BlrsKeyboardPreset {
             symRows.add(digits)
             symRows.add(SY3_A)
             symRows.add(SY3_B)
-            symRows.add(SY3_C)
         } else {
             // Sin fila de números: dígitos en pulsación larga arriba
+            symRows.add(SY3_A)
             symRows.add(SY3_B)
-            symRows.add(SY3_C)
         }
         
         // Fila inferior de sym
@@ -134,9 +133,9 @@ object BlrsKeyboardPreset {
         
         if (showNumbers) {
             sym2Rows.add(digits)
-            sym2Rows.addAll(SY3_S)
+            sym2Rows.addAll(SY3_S.dropLast(1))
         } else {
-            sym2Rows.addAll(SY3_S.drop(1)) // Sin la primera fila
+            sym2Rows.addAll(SY3_S.drop(1).dropLast(1))
         }
         
         // Fila inferior de sym2

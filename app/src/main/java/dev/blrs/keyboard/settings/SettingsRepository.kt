@@ -60,7 +60,7 @@ class SettingsRepository private constructor(context: Context) {
             )
         }
         
-        object KeyHeight : Option<Int>("kh", 46)
+        object KeyHeight : Option<Int>("kh", 40)
     }
     
     // Valores actuales (con defaults aplicados)

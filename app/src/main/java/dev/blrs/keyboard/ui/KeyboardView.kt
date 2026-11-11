@@ -77,6 +77,19 @@ class KeyboardView @JvmOverloads constructor(
     private var popupSelectedIndex = 0
     private var popupRect: RectF? = null
     
+    // Campos reutilizables para rendimiento
+    private val keyRect = RectF()
+    private val variantRect = RectF()
+    private val edgePaint = Paint().apply {
+        color = 0x59000000
+        strokeWidth = 1f
+        style = Paint.Style.STROKE
+    }
+    private val optionPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val cornerPx = dpToPx(4).toFloat()
+    private val gapPx = dpToPx(4).toFloat()
+    private val keySpacingPx = dpToPx(4).toFloat()
+    
     private val repeatRunnable = object : Runnable {
         override fun run() {
             if (isRepeating && repeatStarted && activeKey != null) {
@@ -141,26 +154,27 @@ class KeyboardView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         
+        // Dibujar fondo opaco
+        canvas.drawColor(theme.bgPrimary)
+        
         val layer = currentLayer ?: return
-        val gap = dpToPx(4).toFloat()
-        val keySpacing = dpToPx(4).toFloat()
         
         var y = paddingTop.toFloat()
         
         layer.rows.forEachIndexed { rowIndex, row ->
             var x = paddingStart.toFloat()
-            val unit = rowUnitWidth(row, keySpacing)
+            val unit = rowUnitWidth(row, keySpacingPx)
             
             row.keys.forEachIndexed { keyIndex, key ->
                 val actualWidth = unit * key.width
-                val rect = RectF(x, y, x + actualWidth, y + keyHeightPx)
+                keyRect.set(x, y, x + actualWidth, y + keyHeightPx)
                 
-                drawKey(canvas, rect, key, rowIndex, keyIndex)
+                drawKey(canvas, keyRect, key, rowIndex, keyIndex)
                 
-                x += actualWidth + keySpacing
+                x += actualWidth + keySpacingPx
             }
             
-            y += keyHeightPx + gap
+            y += keyHeightPx + gapPx
         }
         
         // Dibujar popup si está activo
@@ -185,15 +199,11 @@ class KeyboardView @JvmOverloads constructor(
         }
         
         keyPaint.color = bgColor
-        canvas.drawRoundRect(rect, dpToPx(2).toFloat(), dpToPx(2).toFloat(), keyPaint)
+        canvas.drawRoundRect(rect, cornerPx, cornerPx, keyPaint)
         
         // Sombra de canto (estructural, no token)
         if (!isPressed) {
-            val shadowPaint = Paint().apply {
-                color = Color.parseColor("#59000000") // 35% negro
-                strokeWidth = dpToPx(1).toFloat()
-            }
-            canvas.drawLine(rect.left, rect.bottom, rect.right, rect.bottom, shadowPaint)
+            canvas.drawLine(rect.left, rect.bottom, rect.right, rect.bottom, edgePaint)
         }
         
         // Texto de la tecla
@@ -214,7 +224,7 @@ class KeyboardView @JvmOverloads constructor(
                     if (shiftState == 2) {
                         // Lock: relleno de acento
                         keyPaint.color = theme.accent
-                        canvas.drawRoundRect(rect, dpToPx(2).toFloat(), dpToPx(2).toFloat(), keyPaint)
+                        canvas.drawRoundRect(rect, cornerPx, cornerPx, keyPaint)
                         textPaint.color = theme.accentText
                     } else if (shiftState == 1) {
                         // Una vez: contorno
@@ -224,7 +234,7 @@ class KeyboardView @JvmOverloads constructor(
                 "ctrl" -> {
                     if (ctrlState == 2) {
                         keyPaint.color = theme.accent
-                        canvas.drawRoundRect(rect, dpToPx(2).toFloat(), dpToPx(2).toFloat(), keyPaint)
+                        canvas.drawRoundRect(rect, cornerPx, cornerPx, keyPaint)
                         textPaint.color = theme.accentText
                     } else if (ctrlState == 1) {
                         textPaint.color = theme.accentTertiary
@@ -233,7 +243,7 @@ class KeyboardView @JvmOverloads constructor(
                 "alt" -> {
                     if (altState == 2) {
                         keyPaint.color = theme.accent
-                        canvas.drawRoundRect(rect, dpToPx(2).toFloat(), dpToPx(2).toFloat(), keyPaint)
+                        canvas.drawRoundRect(rect, cornerPx, cornerPx, keyPaint)
                         textPaint.color = theme.accentText
                     } else if (altState == 1) {
                         textPaint.color = theme.accentTertiary
@@ -348,16 +358,15 @@ class KeyboardView @JvmOverloads constructor(
         var x = rect.left + dpToPx(4)
         
         variants.forEachIndexed { index, variant ->
-            val variantRect = RectF(
+            variantRect.set(
                 x, rect.top + dpToPx(4),
                 x + variantWidth, rect.bottom - dpToPx(4)
             )
             
             val isSelected = index == popupSelectedIndex
-            val optionPaint = Paint(Paint.ANTI_ALIAS_FLAG)
             optionPaint.color = if (isSelected) theme.accent else theme.bgTertiary
             
-            canvas.drawRoundRect(variantRect, dpToPx(2).toFloat(), dpToPx(2).toFloat(), optionPaint)
+            canvas.drawRoundRect(variantRect, cornerPx, cornerPx, optionPaint)
             
             textPaint.color = if (isSelected) theme.accentText else theme.textPrimary
             canvas.drawText(variant, variantRect.centerX(), variantRect.centerY() + dpToPx(6), textPaint)

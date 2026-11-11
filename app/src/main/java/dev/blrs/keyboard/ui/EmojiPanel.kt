@@ -85,7 +85,7 @@ class EmojiPanel(context: Context) : LinearLayout(context) {
     
     init {
         orientation = VERTICAL
-        setBackgroundColor(Color.parseColor("#121212"))
+        setBackgroundColor(theme.bgPrimary)
         
         // Barra de categorías
         categoryBar = LinearLayout(context).apply {
